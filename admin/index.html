@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LUMIÈRE Admin — Sign In</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body class="login-body">
+
+  <div class="login-wrap">
+    <div class="login-brand">
+      <span class="login-logo">LUMIÈRE</span>
+      <span class="login-sub">Admin Panel</span>
+    </div>
+
+    <form class="login-card" id="loginForm" novalidate>
+      <h2>Sign In</h2>
+      <p class="login-hint">Enter your admin credentials to access the dashboard.</p>
+
+      <div class="field">
+        <label for="uname">Username</label>
+        <div class="field-icon-wrap">
+          <i class="fas fa-user"></i>
+          <input type="text" id="uname" placeholder="admin" autocomplete="username" required />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="pw">Password</label>
+        <div class="field-icon-wrap">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="pw" placeholder="••••••••" autocomplete="current-password" required />
+          <button type="button" class="pw-toggle" id="pwToggle" aria-label="Toggle password visibility">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="login-error" id="loginError" role="alert" hidden>
+        <i class="fas fa-exclamation-circle"></i>&nbsp; Invalid username or password
+      </div>
+
+      <button type="submit" class="btn-login">
+        Sign In &nbsp;<i class="fas fa-arrow-right"></i>
+      </button>
+    </form>
+
+    <a href="../index.html" class="login-back">
+      <i class="fas fa-store"></i> Back to Store
+    </a>
+  </div>
+
+  <script>
+    'use strict';
+    // Redirect if already authenticated
+    if (sessionStorage.getItem('lum_admin') === 'yes') {
+      location.href = 'dashboard.html';
+    }
+
+    const form    = document.getElementById('loginForm');
+    const errEl   = document.getElementById('loginError');
+    const toggle  = document.getElementById('pwToggle');
+    const pwInput = document.getElementById('pw');
+
+    toggle.addEventListener('click', () => {
+      const visible = pwInput.type === 'password';
+      pwInput.type = visible ? 'text' : 'password';
+      toggle.querySelector('i').className = visible ? 'fas fa-eye-slash' : 'fas fa-eye';
+    });
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const u = document.getElementById('uname').value.trim();
+      const p = pwInput.value;
+      if (u === 'admin' && p === 'admin') {
+        sessionStorage.setItem('lum_admin', 'yes');
+        location.href = 'dashboard.html';
+      } else {
+        errEl.hidden = false;
+        pwInput.value = '';
+        pwInput.focus();
+      }
+    });
+  </script>
+</body>
+</html>
